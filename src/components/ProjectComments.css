@@ -1,0 +1,151 @@
+.project-comments {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.comment-form {
+  margin-bottom: 20px;
+}
+
+.comment-input {
+  width: 100%;
+  min-height: 80px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.comment-submit {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.comment-submit:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.comment {
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: 16px;
+  background-color: #f8f9fa;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.comment-author {
+  font-weight: bold;
+  color: #333;
+}
+
+.comment-date {
+  color: #666;
+  font-size: 0.9em;
+}
+
+.edited-mark {
+  color: #666;
+  font-style: italic;
+  font-size: 0.9em;
+}
+
+.comment-content {
+  color: #333;
+  line-height: 1.5;
+}
+
+.comment-content p {
+  margin: 0 0 8px 0;
+}
+
+.comment-content p:last-child {
+  margin-bottom: 0;
+}
+
+.no-comments {
+  text-align: center;
+  color: #666;
+  padding: 20px;
+  font-style: italic;
+}
+
+/* Edit functionality styles */
+.edit-comment-form {
+  width: 100%;
+}
+
+.edit-comment-input {
+  width: 100%;
+  min-height: 60px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.edit-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.save-edit-btn,
+.cancel-edit-btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.save-edit-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.save-edit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.cancel-edit-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.edit-comment-btn {
+  background: none;
+  border: none;
+  color: #007bff;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.edit-comment-btn:hover {
+  text-decoration: underline;
+}

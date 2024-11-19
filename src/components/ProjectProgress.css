@@ -1,0 +1,74 @@
+.project-progress {
+  margin: 2rem 0;
+  max-width: 600px; /* Limit width of progress section */
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.progress-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 6px; /* Slightly thicker bar */
+  background-color: #e5e7eb;
+  border-radius: 3px;
+  margin: 0.5rem 0;
+  position: relative;
+}
+
+.progress-slider {
+  position: absolute;
+  top: -8px;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #3b82f6;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  color: #6b7280;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.progress-percentage {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+/* Progress bar colors based on percentage */
+.progress-bar-low {
+  background-color: #ef4444;
+}
+
+.progress-bar-medium {
+  background-color: #f59e0b;
+}
+
+.progress-bar-high {
+  background-color: #10b981;
+}

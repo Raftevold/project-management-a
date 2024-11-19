@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if user is admin
+    function isAdmin() {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/admins/$(request.auth.token.email));
+    }
+    
+    // Admins collection
+    match /admins/{email} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+    
+    // Departments collection
+    match /departments/{departmentId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Users collection
+    match /users/{userId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // UserDepartments collection
+    match /userDepartments/{userDepartmentId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Projects collection - simplified rules
+    match /projects/{projectId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Project Documents collection
+    match /projectDocuments/{documentId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Project Team Members collection
+    match /projectTeamMembers/{memberId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Project Milestones collection
+    match /projectMilestones/{milestoneId} {
+      allow read, write: if isAuthenticated();
+    }
+  }
+}
