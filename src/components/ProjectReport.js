@@ -152,11 +152,20 @@ const getMilestoneStatusStyle = (status) => {
   }
 };
 
+const formatNumber = (number) => {
+  return Number(number).toLocaleString('nb-NO');
+};
+
 const ProjectReportDocument = ({ project }) => {
   const totalActual = (project.budget.entries || [])
     .reduce((sum, entry) => sum + Number(entry.amount), 0);
   const budgetDifference = project.budget.planned - totalActual;
   const isOverBudget = budgetDifference < 0;
+
+  // Sort budget entries by date in ascending order
+  const sortedBudgetEntries = [...(project.budget.entries || [])].sort(
+    (a, b) => new Date(a.date) - new Date(b.date)
+  );
 
   return (
     <Document>
@@ -182,10 +191,10 @@ const ProjectReportDocument = ({ project }) => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Budsjett</Text>
           <Text style={styles.boldText}>
-            Planlagt budsjett: {project.budget.planned.toLocaleString('nb-NO')} kr
+            Planlagt budsjett: {formatNumber(project.budget.planned)} kr
           </Text>
           <Text style={styles.boldText}>
-            Faktisk forbruk: {totalActual.toLocaleString('nb-NO')} kr
+            Faktisk forbruk: {formatNumber(totalActual)} kr
           </Text>
           
           <View style={[
@@ -194,27 +203,27 @@ const ProjectReportDocument = ({ project }) => {
           ]}>
             <Text style={styles.boldText}>
               {isOverBudget 
-                ? `Overforbruk: ${Math.abs(budgetDifference).toLocaleString('nb-NO')} kr`
-                : `Gjenstående budsjett: ${budgetDifference.toLocaleString('nb-NO')} kr`
+                ? `Overforbruk: ${formatNumber(Math.abs(budgetDifference))} kr`
+                : `Gjenstående budsjett: ${formatNumber(budgetDifference)} kr`
               }
             </Text>
           </View>
           
-          {project.budget.entries && project.budget.entries.length > 0 && (
+          {sortedBudgetEntries.length > 0 && (
             <View style={styles.table}>
               <View style={[styles.tableRow, styles.tableHeader]}>
                 <Text style={styles.tableCell}>Dato</Text>
                 <Text style={styles.tableCell}>Beskrivelse</Text>
                 <Text style={styles.tableCell}>Beløp</Text>
               </View>
-              {project.budget.entries.map((entry, index) => (
+              {sortedBudgetEntries.map((entry, index) => (
                 <View key={index} style={styles.tableRow}>
                   <Text style={styles.tableCell}>
                     {new Date(entry.date).toLocaleDateString('nb-NO')}
                   </Text>
                   <Text style={styles.tableCell}>{entry.description}</Text>
                   <Text style={styles.tableCell}>
-                    {entry.amount.toLocaleString('nb-NO')} kr
+                    {formatNumber(entry.amount)} kr
                   </Text>
                 </View>
               ))}

@@ -6,6 +6,17 @@ import {
 } from 'firebase/firestore';
 
 export const ProjectActions = {
+  handleUpdateDescription: async (projectId, description) => {
+    try {
+      const projectRef = doc(db, 'projects', projectId);
+      await updateDoc(projectRef, { description });
+      return true;
+    } catch (error) {
+      console.error('Feil ved oppdatering av beskrivelse:', error);
+      return false;
+    }
+  },
+
   handleUpdateBudget: async (projectId, budget) => {
     try {
       const projectRef = doc(db, 'projects', projectId);
@@ -163,6 +174,17 @@ export const ProjectActions = {
       return true;
     } catch (error) {
       console.error('Feil ved redigering av kommentar:', error);
+      return false;
+    }
+  },
+
+  handleDeleteComment: async (projectId, commentId, updatedComments) => {
+    try {
+      const projectRef = doc(db, 'projects', projectId);
+      await updateDoc(projectRef, { comments: updatedComments });
+      return true;
+    } catch (error) {
+      console.error('Feil ved sletting av kommentar:', error);
       return false;
     }
   },

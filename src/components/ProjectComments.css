@@ -46,6 +46,7 @@
   border-radius: 4px;
   padding: 16px;
   background-color: #f8f9fa;
+  position: relative;
 }
 
 .comment-header {
@@ -74,6 +75,7 @@
 .comment-content {
   color: #333;
   line-height: 1.5;
+  padding-right: 60px; /* Make room for action buttons */
 }
 
 .comment-content p {
@@ -136,16 +138,38 @@
   color: white;
 }
 
-.edit-comment-btn {
-  background: none;
-  border: none;
-  color: #007bff;
-  padding: 4px 8px;
-  cursor: pointer;
-  font-size: 12px;
-  margin-top: 8px;
+/* Comment action buttons */
+.comment-actions {
+  position: absolute;
+  right: 16px;
+  top: 40px;
+  display: flex;
+  gap: 8px;
 }
 
-.edit-comment-btn:hover {
-  text-decoration: underline;
+.edit-comment-btn,
+.delete-comment-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.edit-comment-btn svg,
+.delete-comment-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.edit-comment-btn svg {
+  color: #4e4b3c; /* Yellow color matching other edit icons */
+}
+
+.delete-comment-btn svg {
+  color: #dc3545; /* Red color for delete */
+}
+
+.edit-comment-btn:hover,
+.delete-comment-btn:hover {
+  opacity: 0.8;
 }

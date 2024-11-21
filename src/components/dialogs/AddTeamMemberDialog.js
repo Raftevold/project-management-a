@@ -1,20 +1,28 @@
 import React, { useState } from 'react';
+import { ProjectActions } from '../department/ProjectActions';
 import './DialogStyles.css';
 
-const AddTeamMemberDialog = ({ onClose, onAdd }) => {
+const AddTeamMemberDialog = ({ project, onClose, onAdd }) => {
   const [member, setMember] = useState({
     name: '',
     role: '',
     email: ''
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onAdd({
+    const newMember = {
       ...member,
       id: Date.now().toString()
-    });
-    onClose();
+    };
+    
+    const updatedTeam = [...project.team, newMember];
+    const success = await ProjectActions.handleAddTeamMember(project.id, newMember, project.team);
+    
+    if (success) {
+      onAdd(updatedTeam);
+      onClose();
+    }
   };
 
   return (

@@ -1,21 +1,30 @@
 import React, { useState } from 'react';
+import { ProjectActions } from '../department/ProjectActions';
 import './DialogStyles.css';
 
-const AddMilestoneDialog = ({ onClose, onAdd }) => {
+const AddMilestoneDialog = ({ project, onClose, onAdd }) => {
   const [milestone, setMilestone] = useState({
     name: '',
     date: '',
     description: ''
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onAdd({
+    const newMilestone = {
       ...milestone,
       id: Date.now().toString(),
-      completed: false
-    });
-    onClose();
+      completed: false,
+      progress: 0
+    };
+    
+    const updatedMilestones = [...project.milestones, newMilestone];
+    const success = await ProjectActions.handleAddMilestone(project.id, newMilestone, project.milestones);
+    
+    if (success) {
+      onAdd(updatedMilestones);
+      onClose();
+    }
   };
 
   return (

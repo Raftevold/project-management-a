@@ -1,0 +1,149 @@
+.project-details {
+  position: relative;
+}
+
+.project-description,
+.project-budget,
+.project-team,
+.project-milestones,
+.project-documents {
+  position: relative;
+  margin-bottom: 30px; /* Increased margin for better separation */
+  padding-bottom: 45px; /* Increased padding to prevent overlap */
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 15px;
+  border: 1px solid #e5e7eb;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.section-header h4 {
+  margin: 0;
+}
+
+.section-header .edit-btn {
+  position: static;
+  margin-left: 10px;
+}
+
+.edit-btn {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  z-index: 1;
+}
+
+.edit-btn svg {
+  width: 20px;
+  height: 20px;
+  color: #4e4b3c;
+}
+
+/* Add button positioning */
+.add-btn {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 35px; /* Space for edit button */
+}
+
+.add-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Lists styling */
+.team-list,
+.milestones-list,
+.documents-list {
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+}
+
+.team-member,
+.milestone,
+.document {
+  padding: 10px;
+  margin-bottom: 8px;
+  background-color: #f8fafc;
+  border-radius: 4px;
+}
+
+/* Project actions */
+.project-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.delete-btn {
+  padding: 5px 10px;
+  border-radius: 4px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+/* Budget info styling */
+.budget-info {
+  margin-bottom: 20px;
+}
+
+/* Milestone specific styles */
+.milestone-progress {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.milestone-progress-input {
+  width: 60px;
+  padding: 2px 5px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+}
+
+.milestone-progress-label {
+  color: #6b7280;
+}
+
+/* Document specific styles */
+.document-info {
+  flex: 1;
+}
+
+.document-meta {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.document-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Section headers */
+h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #1e293b;
+}
