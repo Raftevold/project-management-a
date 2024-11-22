@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './ProjectProgress.css';
 
 const ProjectProgress = ({ progress, onUpdate, isEditable }) => {
+  const [localProgress, setLocalProgress] = useState(progress);
+
+  useEffect(() => {
+    setLocalProgress(progress);
+  }, [progress]);
+
   const handleChange = (e) => {
     if (isEditable && onUpdate) {
-      onUpdate(parseInt(e.target.value, 10));
+      const newProgress = parseInt(e.target.value, 10);
+      setLocalProgress(newProgress);
+      onUpdate(newProgress);
     }
   };
 
@@ -18,7 +26,7 @@ const ProjectProgress = ({ progress, onUpdate, isEditable }) => {
     <div className="project-progress">
       <div className="progress-header">
         <span className="progress-title">Fremdrift</span>
-        <span className="progress-percentage">{progress}%</span>
+        <span className="progress-percentage">{localProgress}%</span>
       </div>
       <div className="progress-bar-container">
         {isEditable && (
@@ -26,14 +34,14 @@ const ProjectProgress = ({ progress, onUpdate, isEditable }) => {
             type="range"
             min="0"
             max="100"
-            value={progress}
+            value={localProgress}
             onChange={handleChange}
             className="progress-slider"
           />
         )}
         <div 
-          className={getProgressBarClass(progress)}
-          style={{ width: `${progress}%` }}
+          className={getProgressBarClass(localProgress)}
+          style={{ width: `${localProgress}%` }}
         />
       </div>
       <div className="progress-labels">

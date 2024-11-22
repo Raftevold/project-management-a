@@ -28,11 +28,37 @@ const ProjectDetails = ({
   const [showAddMilestoneDialog, setShowAddMilestoneDialog] = useState(false);
   const [showBudgetDialog, setShowBudgetDialog] = useState(false);
   const [currentProject, setCurrentProject] = useState(project);
+  const [milestoneProgress, setMilestoneProgress] = useState(
+    project.milestones.reduce((acc, milestone) => ({
+      ...acc,
+      [milestone.id]: milestone.progress ?? 0
+    }), {})
+  );
+  const [localProgress, setLocalProgress] = useState(project.progress ?? 0);
   const isProjectOwner = project.createdBy === auth.currentUser?.email;
   const canEdit = isAdmin || isProjectOwner;
 
+  // Create a project object with the latest local state for the report
+  const getUpdatedProject = () => ({
+    ...currentProject,
+    progress: localProgress,
+    milestones: currentProject.milestones.map(milestone => ({
+      ...milestone,
+      progress: milestoneProgress[milestone.id] ?? (milestone.progress ?? 0)
+    }))
+  });
+
+  const handleProgressUpdate = (projectId, progress) => {
+    setLocalProgress(progress);
+    onProgressUpdate(projectId, progress);
+  };
+
   const handleMilestoneProgressChange = (milestoneId, progress) => {
     const value = Math.min(100, Math.max(0, progress));
+    setMilestoneProgress(prev => ({
+      ...prev,
+      [milestoneId]: value
+    }));
     onMilestoneProgressUpdate(project.id, milestoneId, value);
   };
 
@@ -102,7 +128,6 @@ const ProjectDetails = ({
   };
 
   const handleEditComment = async (commentId, newText, updatedComments) => {
-    // If updatedComments is provided, it means we're handling a delete operation
     if (updatedComments) {
       setCurrentProject(prev => ({
         ...prev,
@@ -111,7 +136,6 @@ const ProjectDetails = ({
       return;
     }
 
-    // Otherwise, handle the edit operation
     const updatedCommentsArray = currentProject.comments.map(comment => 
       comment.id === commentId
         ? { 
@@ -150,8 +174,8 @@ const ProjectDetails = ({
       </div>
 
       <ProjectProgress
-        progress={currentProject.progress || 0}
-        onUpdate={(progress) => onProgressUpdate(currentProject.id, progress)}
+        progress={localProgress}
+        onUpdate={(progress) => handleProgressUpdate(currentProject.id, progress)}
         isEditable={canEdit}
       />
 
@@ -238,7 +262,7 @@ const ProjectDetails = ({
                   type="number"
                   min="0"
                   max="100"
-                  value={milestone.progress || 0}
+                  value={milestoneProgress[milestone.id]}
                   onChange={(e) => handleMilestoneProgressChange(milestone.id, parseInt(e.target.value))}
                   className="milestone-progress-input"
                 />
@@ -324,7 +348,7 @@ const ProjectDetails = ({
 
       <div className="project-actions">
         <div className="project-actions-left">
-          <ProjectReport project={currentProject} />
+          <ProjectReport project={getUpdatedProject()} />
         </div>
         {isAdmin && (
           <div className="project-actions-right">
