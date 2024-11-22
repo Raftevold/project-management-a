@@ -34,6 +34,12 @@ const ProjectDetails = ({
       [milestone.id]: milestone.progress ?? 0
     }), {})
   );
+  const [milestoneCompleted, setMilestoneCompleted] = useState(
+    project.milestones.reduce((acc, milestone) => ({
+      ...acc,
+      [milestone.id]: milestone.completed ?? false
+    }), {})
+  );
   const [localProgress, setLocalProgress] = useState(project.progress ?? 0);
   const isProjectOwner = project.createdBy === auth.currentUser?.email;
   const canEdit = isAdmin || isProjectOwner;
@@ -44,7 +50,8 @@ const ProjectDetails = ({
     progress: localProgress,
     milestones: currentProject.milestones.map(milestone => ({
       ...milestone,
-      progress: milestoneProgress[milestone.id] ?? (milestone.progress ?? 0)
+      progress: milestoneProgress[milestone.id] ?? (milestone.progress ?? 0),
+      completed: milestoneCompleted[milestone.id] ?? milestone.completed ?? false
     }))
   });
 
@@ -60,6 +67,17 @@ const ProjectDetails = ({
       [milestoneId]: value
     }));
     onMilestoneProgressUpdate(project.id, milestoneId, value);
+  };
+
+  const handleToggleMilestone = (projectId, milestoneId) => {
+    setMilestoneCompleted(prev => {
+      const newValue = !prev[milestoneId];
+      return {
+        ...prev,
+        [milestoneId]: newValue
+      };
+    });
+    onToggleMilestone(projectId, milestoneId);
   };
 
   const handleTeamUpdate = async (updatedTeam) => {
@@ -245,8 +263,8 @@ const ProjectDetails = ({
               <input
                 type="checkbox"
                 className="milestone-checkbox"
-                checked={milestone.completed}
-                onChange={() => onToggleMilestone(currentProject.id, milestone.id)}
+                checked={milestoneCompleted[milestone.id] ?? milestone.completed ?? false}
+                onChange={() => handleToggleMilestone(currentProject.id, milestone.id)}
               />
               <div className="milestone-info">
                 <span className="milestone-name">{milestone.name}</span>

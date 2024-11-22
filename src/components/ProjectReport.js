@@ -132,6 +132,11 @@ const styles = StyleSheet.create({
   },
   statusCompleted: {
     color: '#16a34a'
+  },
+  milestoneStatus: {
+    marginTop: 5,
+    fontSize: 10,
+    fontWeight: 'bold'
   }
 });
 
@@ -260,9 +265,14 @@ const ProjectReportDocument = ({ project }) => {
                   <Text style={styles.text}>
                     Dato: {new Date(milestone.date).toLocaleDateString('nb-NO')}
                   </Text>
-                  <Text style={[styles.boldText, statusStyle]}>
+                  <Text style={[styles.milestoneStatus, statusStyle]}>
                     Status: {status} {milestone.progress ? `(${milestone.progress}%)` : ''}
                   </Text>
+                  <View style={{ marginTop: 5 }}>
+                    <View style={styles.progressBar}>
+                      <View style={[styles.progressFill, { width: `${milestone.progress || 0}%` }]} />
+                    </View>
+                  </View>
                 </View>
               </View>
             );
