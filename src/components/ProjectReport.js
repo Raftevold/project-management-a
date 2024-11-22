@@ -34,6 +34,12 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     color: '#4b5563'
   },
+  description: {
+    fontSize: 10,
+    marginBottom: 5,
+    color: '#4b5563',
+    whiteSpace: 'pre-wrap'
+  },
   boldText: {
     fontSize: 10,
     marginBottom: 5,
@@ -179,7 +185,7 @@ const ProjectReportDocument = ({ project }) => {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Prosjektinformasjon</Text>
-          <Text style={styles.text}>Beskrivelse: {project.description}</Text>
+          <Text style={styles.description}>Beskrivelse: {project.description}</Text>
           <Text style={styles.text}>
             Periode: {new Date(project.startDate).toLocaleDateString('nb-NO')} - 
             {new Date(project.endDate).toLocaleDateString('nb-NO')}
@@ -260,7 +266,7 @@ const ProjectReportDocument = ({ project }) => {
                 <View style={{ flex: 1 }}>
                   <Text style={styles.boldText}>{milestone.name}</Text>
                   {milestone.description && (
-                    <Text style={styles.text}>{milestone.description}</Text>
+                    <Text style={styles.description}>{milestone.description}</Text>
                   )}
                   <Text style={styles.text}>
                     Dato: {new Date(milestone.date).toLocaleDateString('nb-NO')}

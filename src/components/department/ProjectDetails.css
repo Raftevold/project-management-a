@@ -1,124 +1,155 @@
 .project-details {
-  position: relative;
-}
-
-.project-description,
-.project-budget,
-.project-team,
-.project-milestones,
-.project-documents {
-  position: relative;
-  margin-bottom: 30px; /* Increased margin for better separation */
-  padding-bottom: 45px; /* Increased padding to prevent overlap */
-  background-color: #fff;
-  border-radius: 4px;
-  padding: 15px;
-  border: 1px solid #e5e7eb;
+  padding: 20px;
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
-.section-header h4 {
+.project-description {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+.project-description p {
   margin: 0;
-}
-
-.section-header .edit-btn {
-  position: static;
-  margin-left: 10px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #4b5563;
 }
 
 .edit-btn {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
   background: none;
   border: none;
   cursor: pointer;
   padding: 5px;
-  z-index: 1;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.edit-btn:hover {
+  color: #3b82f6;
 }
 
 .edit-btn svg {
   width: 20px;
   height: 20px;
-  color: #4e4b3c;
 }
 
-/* Add button positioning */
-.add-btn {
-  display: inline-block;
-  padding: 5px 10px;
-  border-radius: 4px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-  margin-top: 10px;
-  margin-bottom: 35px; /* Space for edit button */
-}
-
-.add-btn:hover {
-  background-color: #0056b3;
-}
-
-/* Lists styling */
-.team-list,
-.milestones-list,
-.documents-list {
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-}
-
-.team-member,
-.milestone,
-.document {
-  padding: 10px;
-  margin-bottom: 8px;
+.project-budget {
+  margin-bottom: 20px;
+  padding: 15px;
   background-color: #f8fafc;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
-/* Project actions */
-.project-actions {
+.budget-info {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
-.delete-btn {
-  padding: 5px 10px;
-  border-radius: 4px;
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.delete-btn:hover {
-  background-color: #c82333;
-}
-
-/* Budget info styling */
-.budget-info {
+.project-team {
   margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8fafc;
+  border-radius: 8px;
 }
 
-/* Milestone specific styles */
+.team-list {
+  margin-bottom: 10px;
+}
+
+.team-member {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
+.member-name {
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+.member-role {
+  color: #6b7280;
+  margin-right: 10px;
+}
+
+.member-email {
+  color: #9ca3af;
+}
+
+.project-milestones {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+.milestones-list {
+  margin-bottom: 10px;
+}
+
+.milestone {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
+.milestone-checkbox {
+  margin-right: 10px;
+}
+
+.milestone-info {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.milestone-name {
+  font-weight: 500;
+  display: block;
+}
+
+.milestone-date {
+  color: #6b7280;
+  font-size: 0.9em;
+  display: block;
+}
+
+.milestone-description {
+  color: #9ca3af;
+  font-size: 0.9em;
+  display: block;
+  margin-top: 5px;
+}
+
 .milestone-progress {
   display: flex;
   align-items: center;
-  gap: 5px;
 }
 
 .milestone-progress-input {
   width: 60px;
-  padding: 2px 5px;
-  border: 1px solid #e5e7eb;
+  padding: 4px;
+  margin-right: 5px;
+  border: 1px solid #d1d5db;
   border-radius: 4px;
 }
 
@@ -126,24 +157,111 @@
   color: #6b7280;
 }
 
-/* Document specific styles */
+.project-documents {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+.documents-list {
+  margin-bottom: 10px;
+}
+
+.document {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
 .document-info {
   flex: 1;
 }
 
-.document-meta {
-  font-size: 0.85rem;
+.document-name {
+  font-weight: 500;
+  display: block;
+}
+
+.document-description {
   color: #6b7280;
+  font-size: 0.9em;
+  display: block;
+  margin-top: 2px;
+}
+
+.document-meta {
+  display: flex;
+  gap: 10px;
+  color: #9ca3af;
+  font-size: 0.8em;
+  margin-top: 5px;
 }
 
 .document-actions {
-  display: flex;
-  gap: 10px;
+  margin-left: 10px;
 }
 
-/* Section headers */
-h4 {
-  margin-top: 0;
-  margin-bottom: 15px;
-  color: #1e293b;
+.download-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s;
+}
+
+.download-btn:hover {
+  background-color: #2563eb;
+}
+
+.download-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.project-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.add-btn {
+  padding: 6px 12px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s;
+}
+
+.add-btn:hover {
+  background-color: #2563eb;
+}
+
+.delete-btn {
+  padding: 6px 12px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s;
+}
+
+.delete-btn:hover {
+  background-color: #dc2626;
 }
