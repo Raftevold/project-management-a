@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { ProjectActions } from '../../services/ProjectActions';
+import { ProjectService } from '../../services/ProjectService';
 import './DialogStyles.css';
 
 const EditDescriptionDialog = ({ project, onClose, onUpdate }) => {
   const [description, setDescription] = useState(project.description || '');
 
   const handleSave = async () => {
-    const success = await ProjectActions.handleUpdateDescription(project.id, description);
+    const success = await ProjectService.handleUpdateDescription(project.id, description);
     if (success) {
       onUpdate(description);
       onClose();

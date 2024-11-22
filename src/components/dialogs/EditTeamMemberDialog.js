@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ProjectActions } from '../../services/ProjectActions';
+import { ProjectService } from '../../services/ProjectService';
 import BaseDialog from './BaseDialog';
 import './DialogStyles.css';
 
@@ -39,7 +39,7 @@ const EditTeamMemberDialog = ({ project, onClose, onUpdate }) => {
 
     try {
       const updatedTeam = project.team.filter(m => m.id !== memberId);
-      const success = await ProjectActions.handleUpdateTeamMember(project.id, updatedTeam);
+      const success = await ProjectService.handleUpdateTeamMember(project.id, updatedTeam);
       
       if (success) {
         onUpdate(updatedTeam);
@@ -74,7 +74,7 @@ const EditTeamMemberDialog = ({ project, onClose, onUpdate }) => {
         member.id === selectedMember.id ? updatedMember : member
       );
 
-      const success = await ProjectActions.handleUpdateTeamMember(project.id, updatedTeam);
+      const success = await ProjectService.handleUpdateTeamMember(project.id, updatedTeam);
       
       if (success) {
         onUpdate(updatedTeam);

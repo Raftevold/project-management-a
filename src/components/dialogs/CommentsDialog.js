@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { auth } from '../../firebase';
-import { ProjectActions } from '../../services/ProjectActions';
+import { ProjectService } from '../../services/ProjectService';
 import BaseDialog from './BaseDialog';
 import './DialogStyles.css';
 
@@ -20,7 +20,7 @@ const CommentsDialog = ({ project, comments = [], onClose, onAddComment, onEditC
       timestamp: new Date().toISOString(),
     };
 
-    const success = await ProjectActions.handleAddComment(project.id, comment, comments);
+    const success = await ProjectService.handleAddComment(project.id, comment, comments);
     if (success) {
       onAddComment(comment);
       setNewComment('');
@@ -30,7 +30,7 @@ const CommentsDialog = ({ project, comments = [], onClose, onAddComment, onEditC
   const handleEditSubmit = async (commentId) => {
     if (!editText.trim()) return;
     
-    const success = await ProjectActions.handleEditComment(project.id, commentId, editText.trim(), comments);
+    const success = await ProjectService.handleEditComment(project.id, commentId, editText.trim(), comments);
     if (success) {
       onEditComment(commentId, editText.trim());
       setEditingCommentId(null);
@@ -41,7 +41,7 @@ const CommentsDialog = ({ project, comments = [], onClose, onAddComment, onEditC
   const handleDeleteComment = async (commentId) => {
     if (window.confirm('Er du sikker på at du vil slette denne kommentaren?')) {
       const updatedComments = comments.filter(comment => comment.id !== commentId);
-      const success = await ProjectActions.handleDeleteComment(project.id, commentId, updatedComments);
+      const success = await ProjectService.handleDeleteComment(project.id, commentId, updatedComments);
       if (success) {
         onEditComment(commentId, null, updatedComments);
       }

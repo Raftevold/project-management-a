@@ -11,7 +11,7 @@ import {
   where,
   serverTimestamp
 } from 'firebase/firestore';
-import { ProjectActions } from '../../../services/ProjectActions';
+import { ProjectService } from '../../../services/ProjectService';
 
 const useDepartmentState = (departmentId, navigate) => {
   const [department, setDepartment] = useState(null);
@@ -198,23 +198,23 @@ const useDepartmentState = (departmentId, navigate) => {
     let success = false;
     switch (action) {
       case 'budget':
-        success = await ProjectActions.handleUpdateBudget(activeProject.id, data);
+        success = await ProjectService.handleUpdateBudget(activeProject.id, data);
         if (success) setShowBudgetDialog(false);
         break;
       case 'team':
-        success = await ProjectActions.handleAddTeamMember(activeProject.id, data, activeProject.team);
+        success = await ProjectService.handleAddTeamMember(activeProject.id, data, activeProject.team);
         if (success) setShowTeamDialog(false);
         break;
       case 'milestone':
-        success = await ProjectActions.handleAddMilestone(activeProject.id, data, activeProject.milestones);
+        success = await ProjectService.handleAddMilestone(activeProject.id, data, activeProject.milestones);
         if (success) setShowMilestoneDialog(false);
         break;
       case 'document':
-        success = await ProjectActions.handleUploadDocument(activeProject.id, data, activeProject.documents);
+        success = await ProjectService.handleUploadDocument(activeProject.id, data, activeProject.documents);
         if (success) setShowDocumentDialog(false);
         break;
       case 'delete':
-        success = await ProjectActions.handleDeleteProject(activeProject.id);
+        success = await ProjectService.handleDeleteProject(activeProject.id);
         if (success) {
           setShowDeleteDialog(false);
           setSelectedProject(null);
@@ -232,7 +232,7 @@ const useDepartmentState = (departmentId, navigate) => {
   const handleMilestoneProgressUpdate = async (projectId, milestoneId, progress) => {
     const project = projects.find(p => p.id === projectId);
     if (project) {
-      const success = await ProjectActions.handleMilestoneProgressUpdate(
+      const success = await ProjectService.handleMilestoneProgressUpdate(
         projectId,
         milestoneId,
         progress,

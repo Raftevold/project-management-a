@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ProjectActions } from '../../services/ProjectActions';
+import { ProjectService } from '../../services/ProjectService';
 import BaseDialog from './BaseDialog';
 import './DialogStyles.css';
 
@@ -75,7 +75,7 @@ const UpdateBudgetDialog = ({ project, onClose, onUpdate }) => {
         entries: entries
       };
 
-      const success = await ProjectActions.handleUpdateBudget(project.id, updatedBudget);
+      const success = await ProjectService.handleUpdateBudget(project.id, updatedBudget);
       
       if (success) {
         onUpdate(updatedBudget);

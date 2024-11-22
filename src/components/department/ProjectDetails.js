@@ -16,7 +16,7 @@ import ProjectTeam from './project-sections/ProjectTeam';
 import ProjectMilestones from './project-sections/ProjectMilestones';
 import ProjectDocuments from './project-sections/ProjectDocuments';
 import ProjectActionsToolbar from './project-sections/ProjectActionsToolbar';
-import { ProjectActions } from '../../services/ProjectActions';
+import { ProjectService } from '../../services/ProjectService';
 
 const ProjectDetails = ({ 
   project, 
@@ -88,7 +88,7 @@ const ProjectDetails = ({
   };
 
   const handleTeamUpdate = async (updatedTeam) => {
-    const success = await ProjectActions.handleUpdateTeamMember(project.id, updatedTeam);
+    const success = await ProjectService.handleUpdateTeamMember(project.id, updatedTeam);
     if (success) {
       setCurrentProject(prev => ({
         ...prev,
@@ -99,7 +99,7 @@ const ProjectDetails = ({
   };
 
   const handleMilestoneUpdate = async (updatedMilestones) => {
-    const success = await ProjectActions.handleUpdateMilestone(project.id, updatedMilestones);
+    const success = await ProjectService.handleUpdateMilestone(project.id, updatedMilestones);
     if (success) {
       setCurrentProject(prev => ({
         ...prev,
@@ -110,7 +110,7 @@ const ProjectDetails = ({
   };
 
   const handleDescriptionUpdate = async (description) => {
-    const success = await ProjectActions.handleUpdateDescription(project.id, description);
+    const success = await ProjectService.handleUpdateDescription(project.id, description);
     if (success) {
       setCurrentProject(prev => ({
         ...prev,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ProjectActions } from '../../services/ProjectActions';
+import { ProjectService } from '../../services/ProjectService';
 import './DialogStyles.css';
 
 const AddMilestoneDialog = ({ project, onClose, onAdd }) => {
@@ -19,7 +19,7 @@ const AddMilestoneDialog = ({ project, onClose, onAdd }) => {
     };
     
     const updatedMilestones = [...project.milestones, newMilestone];
-    const success = await ProjectActions.handleAddMilestone(project.id, newMilestone, project.milestones);
+    const success = await ProjectService.handleAddMilestone(project.id, newMilestone, project.milestones);
     
     if (success) {
       onAdd(updatedMilestones);

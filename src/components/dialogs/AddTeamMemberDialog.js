@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ProjectActions } from '../../services/ProjectActions';
+import { ProjectService } from '../../services/ProjectService';
 import BaseDialog from './BaseDialog';
 import './DialogStyles.css';
 
@@ -39,7 +39,7 @@ const AddTeamMemberDialog = ({ project, onClose, onAdd }) => {
         id: Date.now().toString()
       };
       
-      const success = await ProjectActions.handleAddTeamMember(
+      const success = await ProjectService.handleAddTeamMember(
         project.id, 
         newMember, 
         project.team

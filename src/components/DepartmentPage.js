@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ProjectActions } from '../services/ProjectActions';
+import { ProjectService } from '../services/ProjectService';
 import useDepartmentState from './department/department-sections/DepartmentState';
 import DepartmentHeader from './department/department-sections/DepartmentHeader';
 import ProjectsSection from './department/department-sections/ProjectsSection';
@@ -40,13 +40,13 @@ const DepartmentPage = () => {
           onCreateProject={actions.handleCreateProject}
           onProjectClick={actions.handleProjectClick}
           onProgressUpdate={async (projectId, progress) => {
-            const success = await ProjectActions.handleProgressUpdate(projectId, progress);
+            const success = await ProjectService.handleProgressUpdate(projectId, progress);
             if (success) await actions.fetchProjects();
           }}
           onToggleMilestone={async (projectId, milestoneId) => {
             const project = state.projects.find(p => p.id === projectId);
             if (project) {
-              const success = await ProjectActions.handleToggleMilestone(
+              const success = await ProjectService.handleToggleMilestone(
                 projectId,
                 milestoneId,
                 project.milestones
@@ -58,7 +58,7 @@ const DepartmentPage = () => {
           onAddComment={async (projectId, comment) => {
             const project = state.projects.find(p => p.id === projectId);
             if (project) {
-              const success = await ProjectActions.handleAddComment(
+              const success = await ProjectService.handleAddComment(
                 projectId,
                 comment,
                 project.comments
@@ -69,7 +69,7 @@ const DepartmentPage = () => {
           onEditComment={async (projectId, commentId, newText) => {
             const project = state.projects.find(p => p.id === projectId);
             if (project) {
-              const success = await ProjectActions.handleEditComment(
+              const success = await ProjectService.handleEditComment(
                 projectId,
                 commentId,
                 newText,

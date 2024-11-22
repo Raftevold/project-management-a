@@ -5,7 +5,7 @@ import {
   deleteDoc,
 } from 'firebase/firestore';
 
-export const ProjectActions = {
+export const ProjectService = {
   handleUpdateDescription: async (projectId, description) => {
     try {
       const projectRef = doc(db, 'projects', projectId);
@@ -223,4 +223,4 @@ export const ProjectActions = {
   }
 };
 
-export default ProjectActions;
+export default ProjectService;

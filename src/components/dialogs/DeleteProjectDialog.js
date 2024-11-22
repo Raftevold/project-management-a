@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ProjectActions } from '../../services/ProjectActions';
+import { ProjectService } from '../../services/ProjectService';
 import BaseDialog from './BaseDialog';
 import './DialogStyles.css';
 
@@ -18,7 +18,7 @@ const DeleteProjectDialog = ({ project, onClose, onDelete }) => {
     setError('');
 
     try {
-      const success = await ProjectActions.handleDeleteProject(project.id);
+      const success = await ProjectService.handleDeleteProject(project.id);
       
       if (success) {
         onDelete(project.id);

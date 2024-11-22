@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ProjectActions } from '../../services/ProjectActions';
+import { ProjectService } from '../../services/ProjectService';
 import './DialogStyles.css';
 
 const EditMilestoneDialog = ({ project, onClose, onUpdate }) => {
@@ -27,7 +27,7 @@ const EditMilestoneDialog = ({ project, onClose, onUpdate }) => {
   const handleDelete = async (milestoneId) => {
     if (window.confirm('Er du sikker på at du vil slette denne milepælen?')) {
       const updatedMilestones = milestones.filter(milestone => milestone.id !== milestoneId);
-      const success = await ProjectActions.handleDeleteMilestone(project.id, milestoneId, updatedMilestones);
+      const success = await ProjectService.handleDeleteMilestone(project.id, milestoneId, updatedMilestones);
       if (success) {
         setMilestones(updatedMilestones);
         onUpdate(updatedMilestones);
@@ -42,7 +42,7 @@ const EditMilestoneDialog = ({ project, onClose, onUpdate }) => {
           ? { ...milestone, ...milestoneForm }
           : milestone
       );
-      const success = await ProjectActions.handleUpdateMilestone(project.id, updatedMilestones);
+      const success = await ProjectService.handleUpdateMilestone(project.id, updatedMilestones);
       if (success) {
         setMilestones(updatedMilestones);
         onUpdate(updatedMilestones);
