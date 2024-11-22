@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ProjectActions } from '../department/ProjectActions';
+import { ProjectActions } from '../../services/ProjectActions';
 import './DialogStyles.css';
 
 const EditDescriptionDialog = ({ project, onClose, onUpdate }) => {

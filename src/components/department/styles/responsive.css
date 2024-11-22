@@ -1,0 +1,118 @@
+/* Responsive Design */
+@media (max-width: 768px) {
+  .department-content {
+    padding: 1rem;
+  }
+
+  .team-member {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .member-email {
+    text-align: left;
+  }
+
+  .milestone {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .milestone-progress {
+    justify-content: flex-start;
+  }
+
+  .document {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .document-actions {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .section-header-with-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .section-actions {
+    width: 100%;
+  }
+
+  .section-actions button {
+    flex: 1;
+  }
+
+  .project-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .project-progress-compact {
+    width: 100%;
+  }
+
+  .budget-info div {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .project-actions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .project-actions-right {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .project-actions-right button {
+    width: 100%;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .back-btn,
+  .admin-badge {
+    text-align: center;
+  }
+}
+
+/* Tablet Specific Styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .department-content {
+    padding: 1.25rem;
+  }
+
+  .team-member {
+    grid-template-columns: 1.5fr 1fr 1.5fr;
+  }
+
+  .project-header {
+    padding: 1rem;
+  }
+}
+
+/* Large Screen Optimizations */
+@media (min-width: 1025px) {
+  .department-content {
+    padding: 2rem;
+  }
+
+  .project-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  }
+}

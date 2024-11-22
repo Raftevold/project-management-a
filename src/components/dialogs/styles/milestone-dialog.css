@@ -1,0 +1,100 @@
+.milestone-list {
+  margin: 1rem 0;
+}
+
+.milestone-item {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1rem;
+  background-color: #f8fafc;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.milestone-info {
+  flex: 1;
+  padding-right: 100px; /* Space for actions */
+}
+
+.milestone-name {
+  font-weight: 500;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.milestone-description {
+  color: #6b7280;
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+
+.milestone-date {
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.milestone-status {
+  color: #6b7280;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+.milestone-actions {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.milestone-edit-form {
+  width: 100%;
+  padding-bottom: 3rem; /* Space for form actions */
+  position: relative;
+}
+
+/* Milestone progress styles */
+.milestone-progress {
+  margin-top: 0.5rem;
+}
+
+.milestone-progress-bar {
+  width: 100%;
+  height: 6px;
+  background-color: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.milestone-progress-fill {
+  height: 100%;
+  background-color: #3b82f6;
+  transition: width 0.3s ease;
+}
+
+/* Milestone status indicators */
+.milestone-status-not-started {
+  color: #dc2626;
+}
+
+.milestone-status-in-progress {
+  color: #2563eb;
+}
+
+.milestone-status-completed {
+  color: #16a34a;
+}
+
+/* Milestone form layout */
+.milestone-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.milestone-form-full {
+  grid-column: 1 / -1;
+}

@@ -1,0 +1,215 @@
+.comments-dialog {
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Comment Form */
+.comment-form {
+  margin-bottom: 24px;
+}
+
+.comment-input {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+
+.comment-input:focus {
+  outline: none;
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+}
+
+/* Comments List */
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.comments-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.comments-list::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.comments-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.comment {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  position: relative;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.comment-author {
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.comment-date {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.edited-mark {
+  color: #64748b;
+  font-style: italic;
+  font-size: 0.875rem;
+}
+
+.comment-content {
+  color: #334155;
+  line-height: 1.5;
+  padding-right: 60px;
+}
+
+.comment-content p {
+  margin: 0 0 8px 0;
+}
+
+.comment-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Edit Form */
+.edit-comment-form {
+  width: 100%;
+}
+
+.edit-comment-input {
+  width: 100%;
+  min-height: 80px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.edit-comment-input:focus {
+  outline: none;
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+}
+
+.edit-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+/* Action Buttons */
+.comment-actions {
+  position: absolute;
+  right: 16px;
+  top: 40px;
+  display: flex;
+  gap: 8px;
+}
+
+.edit-btn,
+.delete-btn {
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.edit-btn svg,
+.delete-btn svg,
+.save-edit-btn svg,
+.cancel-edit-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.edit-btn {
+  color: #64748b;
+}
+
+.edit-btn:hover {
+  background-color: #f1f5f9;
+  color: #1a73e8;
+}
+
+.delete-btn {
+  color: #64748b;
+}
+
+.delete-btn:hover {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.save-edit-btn,
+.cancel-edit-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.save-edit-btn {
+  background-color: #1a73e8;
+  color: white;
+}
+
+.save-edit-btn:hover:not(:disabled) {
+  background-color: #1557b0;
+}
+
+.save-edit-btn:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+.cancel-edit-btn {
+  background-color: #e2e8f0;
+  color: #64748b;
+}
+
+.cancel-edit-btn:hover {
+  background-color: #cbd5e1;
+}
+
+.no-comments {
+  text-align: center;
+  color: #64748b;
+  padding: 24px;
+  font-style: italic;
+  background: #f8fafc;
+  border-radius: 6px;
+  border: 1px dashed #e2e8f0;
+}

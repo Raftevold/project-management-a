@@ -1,0 +1,231 @@
+.project-description,
+.project-budget,
+.project-team,
+.project-milestones,
+.project-documents {
+  background: linear-gradient(135deg, #edf4fa 0%, #f1f5f9 100%);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(184, 206, 247, 0.5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.project-description h4,
+.project-budget h4,
+.project-team h4,
+.project-milestones h4,
+.project-documents h4 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Description Section */
+.project-description p {
+  color: #4b5563;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* Budget Section */
+.budget-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.budget-info div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  transition: transform 0.2s ease;
+}
+
+.budget-info div:hover {
+  transform: translateX(4px);
+}
+
+.budget-info span {
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.budget-info strong {
+  color: #1e293b;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Team Section */
+.team-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.team-member {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  transition: transform 0.2s ease;
+}
+
+.team-member:hover {
+  transform: translateX(4px);
+}
+
+.member-name {
+  font-weight: 500;
+  color: #1e293b;
+  font-size: 0.95rem;
+}
+
+.member-role {
+  color: #4b5563;
+  font-size: 0.9rem;
+}
+
+.member-email {
+  color: #64748b;
+  font-size: 0.9rem;
+  text-align: right;
+}
+
+/* Milestones Section */
+.milestones-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.milestone {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  transition: transform 0.2s ease;
+}
+
+.milestone:hover {
+  transform: translateX(4px);
+}
+
+.milestone-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.milestone-name {
+  font-weight: 500;
+  color: #1e293b;
+  font-size: 0.95rem;
+}
+
+.milestone-date {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.milestone-description {
+  color: #4b5563;
+  font-size: 0.85rem;
+}
+
+.milestone-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.milestone-progress-input {
+  width: 60px;
+  padding: 0.35rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  text-align: right;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.milestone-progress-label {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.milestone-checkbox {
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 6px;
+  border: 2px solid #e5e7eb;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Documents Section */
+.documents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.document {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  transition: transform 0.2s ease;
+}
+
+.document:hover {
+  transform: translateX(4px);
+}
+
+.document-info {
+  flex: 1;
+}
+
+.document-name {
+  font-weight: 500;
+  color: #1e293b;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+.document-description {
+  color: #4b5563;
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+
+.document-meta {
+  display: flex;
+  gap: 1rem;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.document-actions {
+  margin-left: 1rem;
+}
