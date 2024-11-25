@@ -16,11 +16,13 @@ const ProjectProgress = ({ progress, onUpdate, isEditable }) => {
     }
   };
 
-  const getProgressBarClass = (progress) => {
-    if (progress < 30) return 'progress-bar progress-bar-low';
-    if (progress < 70) return 'progress-bar progress-bar-medium';
-    return 'progress-bar progress-bar-high';
+  const getProgressColor = (value) => {
+    if (value < 30) return 'low';
+    if (value < 70) return 'medium';
+    return 'high';
   };
+
+  const colorLevel = getProgressColor(localProgress);
 
   return (
     <div className="project-progress">
@@ -28,7 +30,13 @@ const ProjectProgress = ({ progress, onUpdate, isEditable }) => {
         <span className="progress-title">Fremdrift</span>
         <span className="progress-percentage">{localProgress}%</span>
       </div>
-      <div className="progress-bar-container">
+      <div className={`progress-container ${colorLevel}`}>
+        <div className="progress-bar">
+          <div 
+            className="progress-fill"
+            style={{ width: `${localProgress}%` }}
+          />
+        </div>
         {isEditable && (
           <input
             type="range"
@@ -39,10 +47,6 @@ const ProjectProgress = ({ progress, onUpdate, isEditable }) => {
             className="progress-slider"
           />
         )}
-        <div 
-          className={getProgressBarClass(localProgress)}
-          style={{ width: `${localProgress}%` }}
-        />
       </div>
       <div className="progress-labels">
         <span>0%</span>

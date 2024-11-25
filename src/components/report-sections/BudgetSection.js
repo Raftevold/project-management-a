@@ -2,6 +2,14 @@ import React from 'react';
 import { Text, View } from '@react-pdf/renderer';
 import { styles, formatNumber } from './reportStyles';
 
+const formatDate = (date) => {
+  const d = new Date(date);
+  const day = d.getDate().toString().padStart(2, '0');
+  const month = (d.getMonth() + 1).toString().padStart(2, '0');
+  const year = d.getFullYear();
+  return `${day}.${month}.${year}`;
+};
+
 const BudgetSection = ({ budget }) => {
   const totalActual = (budget.entries || [])
     .reduce((sum, entry) => sum + Number(entry.amount), 0);
@@ -45,7 +53,7 @@ const BudgetSection = ({ budget }) => {
           {sortedBudgetEntries.map((entry, index) => (
             <View key={index} style={styles.tableRow}>
               <Text style={styles.tableCell}>
-                {new Date(entry.date).toLocaleDateString('nb-NO')}
+                {formatDate(entry.date)}
               </Text>
               <Text style={styles.tableCell}>{entry.description}</Text>
               <Text style={styles.tableCell}>

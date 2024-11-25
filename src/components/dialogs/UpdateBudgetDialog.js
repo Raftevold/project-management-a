@@ -15,6 +15,14 @@ const UpdateBudgetDialog = ({ project, onClose, onUpdate }) => {
     amount: ''
   });
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
+  };
+
   const calculateTotalSpent = () => {
     return entries.reduce((sum, entry) => sum + Number(entry.amount), 0);
   };
@@ -141,7 +149,7 @@ const UpdateBudgetDialog = ({ project, onClose, onUpdate }) => {
             </div>
             {entries.map(entry => (
               <div key={entry.id} className="table-row">
-                <div>{entry.date}</div>
+                <div>{formatDate(entry.date)}</div>
                 <div>{entry.description}</div>
                 <div>{formatNumber(entry.amount)} kr</div>
               </div>

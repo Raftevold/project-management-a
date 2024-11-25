@@ -75,6 +75,66 @@
   font-size: 0.9rem;
 }
 
+/* Project Progress Compact */
+.project-progress-compact {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 150px;
+}
+
+.project-progress-compact .progress-bar {
+  flex: 1;
+  height: 6px;
+  background-color: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.project-progress-compact .progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* Progress colors based on percentage */
+.project-progress-compact .progress-fill {
+  background-color: #ef4444; /* Default red for low progress */
+}
+
+/* Add color classes based on progress */
+.project-progress-compact[data-progress^="0"] .progress-fill,
+.project-progress-compact[data-progress^="1"] .progress-fill,
+.project-progress-compact[data-progress^="2"] .progress-fill {
+  background-color: #ef4444;
+}
+
+.project-progress-compact[data-progress^="3"] .progress-fill,
+.project-progress-compact[data-progress^="4"] .progress-fill,
+.project-progress-compact[data-progress^="5"] .progress-fill,
+.project-progress-compact[data-progress^="6"] .progress-fill {
+  background-color: #f59e0b;
+}
+
+.project-progress-compact[data-progress^="7"] .progress-fill,
+.project-progress-compact[data-progress^="8"] .progress-fill,
+.project-progress-compact[data-progress^="9"] .progress-fill,
+.project-progress-compact[data-progress="100"] .progress-fill {
+  background-color: #10b981;
+}
+
+.project-progress-compact .progress-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1e293b;
+  min-width: 3rem;
+  text-align: right;
+}
+
 /* Project Details Base */
 .project-details {
   background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);

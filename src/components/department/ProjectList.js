@@ -30,7 +30,10 @@ const ProjectList = ({
                 {new Date(project.endDate).toLocaleDateString()}
               </span>
             </div>
-            <div className="project-progress-compact">
+            <div 
+              className="project-progress-compact"
+              data-progress={project.progress || 0}
+            >
               <div className="progress-bar">
                 <div 
                   className="progress-fill"
