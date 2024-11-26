@@ -6,7 +6,7 @@ A comprehensive project management application built with React and Firebase, de
 
 - **Department Management**
   - Create and manage multiple departments
-  - Assign users to departments
+  - Granular access control for departments
   - Department-specific project views
 
 - **Project Management**
@@ -19,15 +19,15 @@ A comprehensive project management application built with React and Firebase, de
 
 - **Team Collaboration**
   - Add team members to projects
-  - Role-based access control
-  - Real-time updates and notifications
+  - Hierarchical permission system
+  - Real-time updates
   - Project discussions and comments
 
-- **Reporting**
-  - Project progress tracking
-  - Budget monitoring
-  - Project status reports
-  - Department overview
+- **Permission Management**
+  - System-wide admin controls
+  - Department-level admin roles
+  - Visual permission indicators
+  - Audit trail for permission changes
 
 ## Technical Stack
 
@@ -36,9 +36,7 @@ A comprehensive project management application built with React and Firebase, de
   - Firestore (Database)
   - Firebase Authentication
   - Firebase Storage
-  - Firebase Analytics
-- **Styling**: CSS Modules
-- **State Management**: React Context API
+- **Styling**: Modern CSS with gradients
 - **Authentication**: Google Sign-In
 
 ## Setup and Installation
@@ -63,7 +61,6 @@ A comprehensive project management application built with React and Firebase, de
    REACT_APP_FIREBASE_STORAGE_BUCKET=your_storage_bucket
    REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
    REACT_APP_FIREBASE_APP_ID=your_app_id
-   REACT_APP_FIREBASE_MEASUREMENT_ID=your_measurement_id
    ```
 
 4. **Start Development Server**
@@ -82,8 +79,10 @@ project-management-app/
 │   │   ├── dialogs/        # Dialog components
 │   │   ├── AdminPage.js    # Admin dashboard
 │   │   ├── Auth.js         # Authentication component
-│   │   ├── FrontPage.js    # Landing page
 │   │   └── ...
+│   ├── services/
+│   │   ├── PermissionService.js  # Permission management
+│   │   └── ProjectService.js     # Project operations
 │   ├── firebase.js         # Firebase configuration
 │   ├── initFirestore.js    # Firestore initialization
 │   └── App.js             
@@ -91,82 +90,85 @@ project-management-app/
 └── package.json
 ```
 
-## Brukerroller og Tilganger
+## Tilgangssystem
 
-### Administrator (Admin)
-Administratorer har følgende eksklusive rettigheter:
-- Opprette og slette avdelinger
-- Administrere brukertilgang til avdelinger
-- Se alle avdelinger i systemet
-- Administrere systeminnstillinger
-- Full tilgang til admin-dashbordet
+### Brukerroller
 
-### Vanlige Brukere med Avdelingstilgang
-Når en bruker har fått tilgang til en avdeling, kan de:
-- Opprette nye prosjekter i avdelingen
-- Administrere eksisterende prosjekter:
-  - Oppdatere prosjektinformasjon
-  - Legge til og administrere team-medlemmer
-  - Opprette og oppdatere milepæler
-  - Laste opp og administrere dokumenter
-  - Oppdatere budsjett
-  - Legge til kommentarer
-  - Oppdatere prosjektets fremdrift
-- Se alle prosjekter i avdelingen de har tilgang til
-- Laste ned prosjektdokumenter
-- Delta i prosjektdiskusjoner
+1. **Systemadministrator**
+   - Full tilgang til hele systemet
+   - Kan opprette og slette avdelinger
+   - Kan gi og fjerne tilganger
+   - Tilgang til admin-dashbordet
 
-### Hovedforskjeller mellom Admin og Vanlige Brukere
+2. **Avdelingsadministrator**
+   - Full tilgang til sin avdeling
+   - Kan administrere prosjekter
+   - Kan administrere team
+   - Kan ikke gi tilganger
 
-1. **Avdelingsnivå**
-   - Admin: Kan opprette, slette og administrere avdelinger
-   - Bruker: Kan kun se og jobbe i avdelinger de har fått tilgang til
+3. **Avdelingsmedlem**
+   - Kan se og jobbe med prosjekter
+   - Kan kommentere og oppdatere status
+   - Begrenset til tildelte avdelinger
 
-2. **Brukertilgang**
-   - Admin: Kan gi andre brukere tilgang til avdelinger
-   - Bruker: Ingen mulighet til å administrere tilgang
+### Tilgangshåndtering
 
-3. **Prosjektnivå**
-   - Admin: Har tilgang til alle prosjekter i alle avdelinger
-   - Bruker: Har full tilgang til prosjekter i avdelinger de er medlem av
+1. **Brukerregistrering**
+   - Automatisk opprettelse ved første innlogging
+   - Google-autentisering
+   - Vises i admin-panelet etter første innlogging
 
-4. **Systemadministrasjon**
-   - Admin: Har tilgang til admin-dashbordet og systeminnstillinger
-   - Bruker: Ingen tilgang til administrative funksjoner
+2. **Administrasjon av Tilganger**
+   - Administreres via admin-panelet
+   - Tydelig visning av eksisterende tilganger
+   - Enkel tildeling/fjerning av tilganger
+   - Visuell bekreftelse med badges
 
-### Tilgangskontroll i Systemet
+3. **Tilgangskontroll**
+   - Sjekkes både i frontend og backend
+   - Firestore security rules
+   - Audit logging av endringer
+   - Automatisk redirect ved manglende tilgang
 
-1. **Autentisering**
-   - Alle brukere må logge inn med Google-autentisering
-   - Første innlogging oppretter automatisk en brukerpost i systemet
+### Administrasjonspanel
 
-2. **Avdelingstilgang**
-   - Administreres av admin gjennom admin-panelet
-   - Brukere må ha logget inn minst én gang for å kunne få tilgang
-   - Tilgang lagres i `userDepartments`-collection
+1. **Avdelingsoversikt**
+   - Liste over alle avdelinger
+   - Antall brukere per avdeling
+   - Mulighet for å opprette nye avdelinger
 
-3. **Prosjekttilgang**
-   - Automatisk tilgang til alle prosjekter i avdelinger man er medlem av
-   - Mulighet til å opprette og administrere prosjekter innen disse avdelingene
+2. **Brukertilganger**
+   - Oversikt over alle brukere
+   - Tydelige badges viser nåværende tilganger
+   - Knapper for å gi/fjerne tilganger
+   - Knapper for å gi/fjerne admin-status
+
+## Security Considerations
+
+- Hierarkisk tilgangskontroll
+- Firestore security rules
+- Google Authentication required
+- Audit trail for tilgangsendringer
+- Automatisk brukeropprettelse
 
 ## Development Guidelines
 
 ### Code Style
-- Use functional components with hooks
-- Follow React best practices
-- Use CSS modules for styling
-- Implement proper error handling
-- Write meaningful component and function names
+- Functional components with hooks
+- Modern CSS with gradients
+- Proper error handling
+- Clear component structure
 
-### State Management
-- Use React Context for global state
-- Keep component state local when possible
-- Implement proper data fetching patterns
+### Permission Management
+- Use PermissionService for all access checks
+- Implement proper error handling
+- Keep UI consistent with permissions
+- Clear feedback on permission changes
 
 ### Firebase Integration
 - Follow Firebase security best practices
-- Implement proper error handling for Firebase operations
-- Use appropriate Firebase SDK features
+- Implement proper error handling
+- Use appropriate Firebase features
 
 ## Deployment
 
@@ -180,25 +182,9 @@ Når en bruker har fått tilgang til en avdeling, kan de:
    firebase deploy
    ```
 
-## Security Considerations
-
-- All Firebase API keys are stored in environment variables
-- Firestore security rules are implemented
-- Google Authentication is required
-- Role-based access control is enforced
-- Regular security audits are recommended
-
-## Performance Optimization
-
-- Implement lazy loading for components
-- Use Firebase query pagination
-- Optimize image and file uploads
-- Cache frequently accessed data
-- Monitor Firebase usage quotas
-
 ## Support and Maintenance
 
-- Regular updates and security patches
-- Backup strategy for Firestore data
-- Monitor Firebase Analytics for usage patterns
-- Regular code reviews and updates
+- Regular security updates
+- Backup strategy
+- Permission audit logs
+- Regular code reviews
