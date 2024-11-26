@@ -18,6 +18,12 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .admin-header h1 {
   margin: 0;
   color: white;
@@ -68,22 +74,6 @@
   color: #991b1b;
 }
 
-.back-btn {
-  padding: 0.5rem 1rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
-}
-
-.back-btn:hover {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.2) 100%);
-  transform: translateY(-1px);
-}
-
 /* Department Form Styles */
 .department-form {
   display: flex;
@@ -125,6 +115,18 @@
   resize: vertical;
 }
 
+/* Button Styles */
+.back-btn {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
 .create-btn {
   padding: 0.75rem 1.5rem;
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
@@ -136,59 +138,6 @@
   font-weight: 500;
   transition: all 0.2s ease;
   box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
-}
-
-.create-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
-}
-
-/* Departments List Styles */
-.departments-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.department-item {
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-  padding: 1.5rem;
-  border-radius: 12px;
-  border: 1px solid rgba(229, 231, 235, 0.5);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
-}
-
-.department-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.department-info {
-  margin-bottom: 1.25rem;
-}
-
-.department-info h3 {
-  margin: 0 0 0.5rem 0;
-  color: #1e293b;
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.department-info p {
-  color: #64748b;
-  margin: 0 0 0.75rem 0;
-  line-height: 1.5;
-}
-
-.department-info span {
-  color: #64748b;
-  font-size: 0.9rem;
-}
-
-.department-actions {
-  display: flex;
-  gap: 0.75rem;
 }
 
 .manage-btn {
@@ -213,11 +162,40 @@
   transition: all 0.2s ease;
 }
 
-/* User Access Panel Styles */
+/* Department Management Styles */
+.departments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.department-item {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.department-info {
+  margin-bottom: 1rem;
+}
+
+.department-info h3 {
+  margin: 0 0 0.5rem 0;
+  color: #1e293b;
+  font-size: 1.1rem;
+}
+
+.department-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
 .user-access-panel {
   margin-top: 1.25rem;
   padding: 1.25rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: #f8fafc;
   border-radius: 8px;
   border: 1px solid rgba(229, 231, 235, 0.5);
 }
@@ -231,17 +209,23 @@
 .users-list {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .user-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem;
+  padding: 1rem;
   background: white;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid rgba(229, 231, 235, 0.5);
+}
+
+.role-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .add-user-btn {
@@ -255,18 +239,71 @@
   transition: all 0.2s ease;
 }
 
-/* Button Hover Effects */
+.remove-user-btn {
+  padding: 0.4rem 1rem;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.make-admin-btn {
+  padding: 0.4rem 1rem;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.remove-admin-btn {
+  padding: 0.4rem 1rem;
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  font-size: 1.1rem;
+  color: #64748b;
+}
+
+/* Hover Effects */
+.back-btn:hover,
+.create-btn:hover,
 .manage-btn:hover,
 .delete-btn:hover,
-.add-user-btn:hover {
+.add-user-btn:hover,
+.remove-user-btn:hover,
+.make-admin-btn:hover,
+.remove-admin-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Button Active Effects */
+/* Active Effects */
+.back-btn:active,
+.create-btn:active,
 .manage-btn:active,
 .delete-btn:active,
-.add-user-btn:active {
+.add-user-btn:active,
+.remove-user-btn:active,
+.make-admin-btn:active,
+.remove-admin-btn:active {
   transform: scale(0.98);
 }
 
@@ -286,7 +323,20 @@
     text-align: center;
   }
 
-  .add-user-btn {
+  .role-buttons {
+    flex-direction: column;
     width: 100%;
+  }
+
+  .add-user-btn,
+  .remove-user-btn,
+  .make-admin-btn,
+  .remove-admin-btn {
+    width: 100%;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 }

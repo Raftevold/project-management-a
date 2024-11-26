@@ -1,57 +1,59 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Helper function to check if user is authenticated
+    // Helper Functions
     function isAuthenticated() {
       return request.auth != null;
     }
-    
-    // Helper function to check if user is admin
+
     function isAdmin() {
       return isAuthenticated() && 
         exists(/databases/$(database)/documents/admins/$(request.auth.token.email));
     }
-    
-    // Admins collection
+
+    // Allow read access to admins collection for authentication
     match /admins/{email} {
       allow read: if isAuthenticated();
-      allow write: if isAuthenticated();
+      allow write: if isAuthenticated() && (
+        !exists(/databases/$(database)/documents/admins/$(request.auth.token.email)) || 
+        isAdmin()
+      );
     }
-    
-    // Departments collection
+
+    // Allow users to manage their own data
+    match /users/{userId} {
+      allow read, write: if isAuthenticated() && (
+        request.auth.uid == userId || 
+        isAdmin()
+      );
+    }
+
+    // Allow read access to departments for authenticated users
     match /departments/{departmentId} {
       allow read: if isAuthenticated();
       allow write: if isAdmin();
     }
 
-    // Users collection
-    match /users/{userId} {
-      allow read, write: if isAuthenticated();
+    // Allow access to department roles
+    match /departmentRoles/{userId} {
+      allow read: if isAuthenticated() && (
+        request.auth.uid == userId || 
+        isAdmin()
+      );
+      allow write: if isAdmin();
     }
 
-    // UserDepartments collection
-    match /userDepartments/{userDepartmentId} {
-      allow read, write: if isAuthenticated();
-    }
-
-    // Projects collection - simplified rules
+    // Allow access to projects
     match /projects/{projectId} {
-      allow read, write: if isAuthenticated();
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
     }
 
-    // Project Documents collection
-    match /projectDocuments/{documentId} {
-      allow read, write: if isAuthenticated();
-    }
-
-    // Project Team Members collection
-    match /projectTeamMembers/{memberId} {
-      allow read, write: if isAuthenticated();
-    }
-
-    // Project Milestones collection
-    match /projectMilestones/{milestoneId} {
-      allow read, write: if isAuthenticated();
+    // Allow audit log creation but restrict access
+    match /auditLog/{logId} {
+      allow read: if isAdmin();
+      allow create: if isAuthenticated();
+      allow update, delete: if false;
     }
   }
 }

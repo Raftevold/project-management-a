@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db, auth } from '../../../firebase';
-import { checkIsAdmin } from '../../../initFirestore';
+import { permissionService } from '../../../services/PermissionService';
 import {
   collection,
   doc,
@@ -19,6 +19,7 @@ const useDepartmentState = (departmentId, navigate) => {
   const [showNewProject, setShowNewProject] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isDepartmentAdmin, setIsDepartmentAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   
   // Dialog visibility states
@@ -46,6 +47,39 @@ const useDepartmentState = (departmentId, navigate) => {
     comments: []
   });
 
+  const checkAccess = async () => {
+    if (!auth.currentUser) {
+      navigate('/');
+      return false;
+    }
+
+    try {
+      const [adminStatus, deptAdminStatus] = await Promise.all([
+        permissionService.isSystemAdmin(auth.currentUser.uid),
+        permissionService.isDepartmentAdmin(auth.currentUser.uid, departmentId)
+      ]);
+
+      setIsAdmin(adminStatus);
+      setIsDepartmentAdmin(deptAdminStatus);
+
+      // Check if user has any access to this department
+      const hasDeptAccess = adminStatus || 
+        deptAdminStatus || 
+        await permissionService.isDepartmentMember(auth.currentUser.uid, departmentId);
+
+      if (!hasDeptAccess) {
+        navigate('/');
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Feil ved sjekk av tilgang:', error);
+      navigate('/');
+      return false;
+    }
+  };
+
   const fetchDepartmentData = async () => {
     if (!auth.currentUser) return;
 
@@ -53,9 +87,12 @@ const useDepartmentState = (departmentId, navigate) => {
       const departmentDoc = await getDoc(doc(db, 'departments', departmentId));
       if (departmentDoc.exists()) {
         setDepartment({ id: departmentDoc.id, ...departmentDoc.data() });
+      } else {
+        navigate('/');
       }
     } catch (error) {
       console.error('Feil ved henting av avdelingsdata:', error);
+      navigate('/');
     }
   };
 
@@ -79,31 +116,21 @@ const useDepartmentState = (departmentId, navigate) => {
   };
 
   useEffect(() => {
-    const checkAuth = async () => {
-      if (!auth.currentUser) {
-        navigate('/');
-        return;
-      }
-
-      try {
-        const adminStatus = await checkIsAdmin(auth.currentUser.email);
-        setIsAdmin(adminStatus);
-        setLoading(false);
-
+    const initialize = async () => {
+      const hasAccess = await checkAccess();
+      if (hasAccess) {
         await fetchDepartmentData();
         await fetchProjects();
-      } catch (error) {
-        console.error('Feil ved autentisering:', error);
-        setLoading(false);
       }
+      setLoading(false);
     };
 
-    checkAuth();
+    initialize();
   }, [departmentId, navigate]);
 
   const handleCreateProject = async (e) => {
     e.preventDefault();
-    if (!auth.currentUser) return;
+    if (!auth.currentUser || (!isAdmin && !isDepartmentAdmin)) return;
 
     try {
       const projectData = {
@@ -163,7 +190,9 @@ const useDepartmentState = (departmentId, navigate) => {
         setShowDocumentDialog(true);
         break;
       case 'delete':
-        setShowDeleteDialog(true);
+        if (isAdmin || isDepartmentAdmin) {
+          setShowDeleteDialog(true);
+        }
         break;
       default:
         break;
@@ -214,10 +243,12 @@ const useDepartmentState = (departmentId, navigate) => {
         if (success) setShowDocumentDialog(false);
         break;
       case 'delete':
-        success = await ProjectService.handleDeleteProject(activeProject.id);
-        if (success) {
-          setShowDeleteDialog(false);
-          setSelectedProject(null);
+        if (isAdmin || isDepartmentAdmin) {
+          success = await ProjectService.handleDeleteProject(activeProject.id);
+          if (success) {
+            setShowDeleteDialog(false);
+            setSelectedProject(null);
+          }
         }
         break;
       default:
@@ -259,6 +290,7 @@ const useDepartmentState = (departmentId, navigate) => {
       showNewProject,
       selectedProject,
       isAdmin,
+      isDepartmentAdmin,
       loading,
       showBudgetDialog,
       showTeamDialog,

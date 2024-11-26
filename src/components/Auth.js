@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { auth, provider } from '../firebase';
+import { auth, provider, db } from '../firebase';
 import { 
   signInWithPopup,
   signOut, 
   onAuthStateChanged
 } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import './Auth.css';
 
 const Auth = ({ user, setUser }) => {
@@ -21,12 +22,31 @@ const Auth = ({ user, setUser }) => {
     return () => unsubscribe();
   }, [setUser]);
 
+  const createUserDocument = async (user) => {
+    try {
+      const userRef = doc(db, 'users', user.uid);
+      await setDoc(userRef, {
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }, { merge: true });
+    } catch (error) {
+      console.error("Feil ved oppretting av brukerdokument:", error);
+    }
+  };
+
   const signInWithGoogle = async () => {
     try {
       setIsLoading(true);
       setError(null);
       const result = await signInWithPopup(auth, provider);
       console.log("Pålogging vellykket:", result.user.displayName);
+      
+      // Create user document in Firestore
+      await createUserDocument(result.user);
+      
       setUser(result.user);
     } catch (error) {
       console.error("Feil ved pålogging:", error);

@@ -3,25 +3,23 @@ import { collection, doc, setDoc, getDoc, getDocs, query } from 'firebase/firest
 
 export const initializeFirestore = async () => {
   try {
-    // Sjekk først om admin-dokumentet allerede eksisterer
+    // Create admin user document first
     const adminDocRef = doc(db, 'admins', 'raftevold@gmail.com');
     const adminDoc = await getDoc(adminDocRef);
 
     if (!adminDoc.exists()) {
-      // Legg til admin hvis den ikke eksisterer
       await setDoc(adminDocRef, {
         email: 'raftevold@gmail.com',
-        role: 'admin',
+        role: 'ADMIN',
         createdAt: new Date()
       });
       console.log('Admin lagt til:', 'raftevold@gmail.com');
     }
 
-    // Sjekk om det allerede finnes avdelinger
+    // Check and create default departments
     const departmentsRef = collection(db, 'departments');
     const departmentsSnapshot = await getDocs(query(departmentsRef));
     
-    // Bare legg til avdelinger hvis det ikke finnes noen fra før
     if (departmentsSnapshot.empty) {
       const departments = [
         {
@@ -62,7 +60,7 @@ export const initializeFirestore = async () => {
   }
 };
 
-// Funksjon for å sjekke admin-status
+// Function to check admin status
 export const checkIsAdmin = async (email) => {
   if (!email) return false;
   try {
@@ -72,5 +70,31 @@ export const checkIsAdmin = async (email) => {
   } catch (error) {
     console.error('Feil ved sjekk av admin-status:', error);
     return false;
+  }
+};
+
+// Function to ensure user document exists
+export const ensureUserExists = async (uid, email) => {
+  if (!uid || !email) return;
+  
+  try {
+    // Create/update user document
+    const userRef = doc(db, 'users', uid);
+    await setDoc(userRef, {
+      email,
+      updatedAt: new Date()
+    }, { merge: true });
+
+    // Check if user is admin
+    const isAdmin = await checkIsAdmin(email);
+    if (isAdmin) {
+      // Update user document with admin role
+      await setDoc(userRef, {
+        roles: ['ADMIN'],
+        updatedAt: new Date()
+      }, { merge: true });
+    }
+  } catch (error) {
+    console.error('Feil ved oppretting av bruker:', error);
   }
 };

@@ -1,43 +1,62 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { initializeFirestore, checkIsAdmin } from '../initFirestore';
 import { auth, db } from '../firebase';
+import { checkIsAdmin } from '../initFirestore';
+import Auth from './Auth';
 import { 
   collection, 
   getDocs, 
-  addDoc, 
+  addDoc,
   deleteDoc, 
-  doc, 
-  updateDoc,
+  doc,
+  getDoc,
   setDoc,
+  updateDoc,
   query,
   where
 } from 'firebase/firestore';
 import './AdminPage.css';
 
 const AdminPage = () => {
-  const [isInitializing, setIsInitializing] = useState(false);
   const [message, setMessage] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [departments, setDepartments] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [newDepartment, setNewDepartment] = useState({
     name: '',
     description: ''
   });
-  const [users, setUsers] = useState([]);
-  const [selectedDepartment, setSelectedDepartment] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkAdmin = async () => {
-      if (auth.currentUser) {
+    const checkAdminStatus = async () => {
+      if (!auth.currentUser) {
+        setIsAdmin(false);
+        setLoading(false);
+        return;
+      }
+
+      try {
         const adminStatus = await checkIsAdmin(auth.currentUser.email);
+        console.log("Admin check result:", adminStatus, "for user:", auth.currentUser.email);
         setIsAdmin(adminStatus);
+        setUser(auth.currentUser);
+        
+        if (adminStatus) {
+          await fetchDepartments();
+          await fetchUsers();
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error('Error checking admin status:', error);
+        setLoading(false);
       }
     };
-    checkAdmin();
-    fetchDepartments();
-    fetchUsers();
+
+    checkAdminStatus();
   }, []);
 
   const fetchDepartments = async () => {
@@ -56,17 +75,7 @@ const AdminPage = () => {
 
   const fetchUsers = async () => {
     try {
-      // First ensure the current user exists in the users collection
-      if (auth.currentUser) {
-        const userRef = doc(db, 'users', auth.currentUser.uid);
-        await setDoc(userRef, {
-          email: auth.currentUser.email,
-          updatedAt: new Date()
-        }, { merge: true });
-      }
-
-      const usersCollection = collection(db, 'users');
-      const querySnapshot = await getDocs(usersCollection);
+      const querySnapshot = await getDocs(collection(db, 'users'));
       const usersList = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
@@ -74,6 +83,7 @@ const AdminPage = () => {
       setUsers(usersList);
     } catch (error) {
       console.error('Feil ved henting av brukere:', error);
+      setMessage('Feil ved henting av brukere: ' + error.message);
     }
   };
 
@@ -88,7 +98,7 @@ const AdminPage = () => {
       await addDoc(collection(db, 'departments'), departmentData);
       setMessage('Avdeling opprettet!');
       setNewDepartment({ name: '', description: '' });
-      fetchDepartments();
+      await fetchDepartments();
     } catch (error) {
       console.error('Feil ved opprettelse av avdeling:', error);
       setMessage('Feil ved opprettelse av avdeling: ' + error.message);
@@ -100,7 +110,7 @@ const AdminPage = () => {
       try {
         await deleteDoc(doc(db, 'departments', departmentId));
         setMessage('Avdeling slettet!');
-        fetchDepartments();
+        await fetchDepartments();
       } catch (error) {
         console.error('Feil ved sletting av avdeling:', error);
         setMessage('Feil ved sletting av avdeling: ' + error.message);
@@ -110,36 +120,133 @@ const AdminPage = () => {
 
   const handleAddUserToDepartment = async (userId, departmentId) => {
     try {
-      const userDepartmentRef = doc(db, 'userDepartments', `${userId}_${departmentId}`);
-      await setDoc(userDepartmentRef, {
-        userId,
-        departmentId,
-        addedAt: new Date()
-      });
+      const userDepartmentRef = doc(db, 'departmentRoles', userId);
+      const userDepartmentDoc = await getDoc(userDepartmentRef);
       
-      // Update department userCount
-      const departmentRef = doc(db, 'departments', departmentId);
-      const department = departments.find(d => d.id === departmentId);
-      if (department) {
-        await updateDoc(departmentRef, {
-          userCount: (department.userCount || 0) + 1
-        });
+      let departments = [];
+      if (userDepartmentDoc.exists()) {
+        departments = userDepartmentDoc.data().memberOf || [];
+        if (departments.includes(departmentId)) {
+          setMessage('Bruker har allerede tilgang til denne avdelingen');
+          return;
+        }
       }
       
+      await setDoc(userDepartmentRef, {
+        memberOf: [...departments, departmentId],
+        updatedAt: new Date()
+      }, { merge: true });
+
+      // Update department userCount
+      const departmentRef = doc(db, 'departments', departmentId);
+      const departmentDoc = await getDoc(departmentRef);
+      await updateDoc(departmentRef, {
+        userCount: (departmentDoc.data().userCount || 0) + 1
+      });
+      
       setMessage('Bruker lagt til i avdeling!');
-      fetchDepartments();
+      await fetchDepartments();
     } catch (error) {
-      console.error('Feil ved tillegging av bruker til avdeling:', error);
+      console.error('Feil ved tillegging av bruker:', error);
       setMessage('Feil ved tillegging av bruker: ' + error.message);
     }
   };
 
-  if (!auth.currentUser) {
+  const handleRemoveUserFromDepartment = async (userId, departmentId) => {
+    try {
+      const userDepartmentRef = doc(db, 'departmentRoles', userId);
+      const userDepartmentDoc = await getDoc(userDepartmentRef);
+      
+      if (userDepartmentDoc.exists()) {
+        const departments = userDepartmentDoc.data().memberOf || [];
+        const updatedDepartments = departments.filter(id => id !== departmentId);
+        
+        await setDoc(userDepartmentRef, {
+          memberOf: updatedDepartments,
+          updatedAt: new Date()
+        }, { merge: true });
+
+        // Update department userCount
+        const departmentRef = doc(db, 'departments', departmentId);
+        const departmentDoc = await getDoc(departmentRef);
+        await updateDoc(departmentRef, {
+          userCount: Math.max((departmentDoc.data().userCount || 1) - 1, 0)
+        });
+
+        setMessage('Brukertilgang fjernet!');
+        await fetchDepartments();
+      }
+    } catch (error) {
+      console.error('Feil ved fjerning av brukertilgang:', error);
+      setMessage('Feil ved fjerning av brukertilgang: ' + error.message);
+    }
+  };
+
+  const handleMakeUserDepartmentAdmin = async (userId, departmentId) => {
+    try {
+      const userDepartmentRef = doc(db, 'departmentRoles', userId);
+      const userDepartmentDoc = await getDoc(userDepartmentRef);
+      
+      let adminOf = [];
+      if (userDepartmentDoc.exists()) {
+        adminOf = userDepartmentDoc.data().adminOf || [];
+        if (adminOf.includes(departmentId)) {
+          setMessage('Bruker er allerede admin for denne avdelingen');
+          return;
+        }
+      }
+      
+      await setDoc(userDepartmentRef, {
+        adminOf: [...adminOf, departmentId],
+        updatedAt: new Date()
+      }, { merge: true });
+      
+      setMessage('Bruker gjort til avdelingsadmin!');
+    } catch (error) {
+      console.error('Feil ved setting av admin:', error);
+      setMessage('Feil ved setting av admin: ' + error.message);
+    }
+  };
+
+  const handleRemoveDepartmentAdmin = async (userId, departmentId) => {
+    try {
+      const userDepartmentRef = doc(db, 'departmentRoles', userId);
+      const userDepartmentDoc = await getDoc(userDepartmentRef);
+      
+      if (userDepartmentDoc.exists()) {
+        const adminOf = userDepartmentDoc.data().adminOf || [];
+        const updatedAdminOf = adminOf.filter(id => id !== departmentId);
+        
+        await setDoc(userDepartmentRef, {
+          adminOf: updatedAdminOf,
+          updatedAt: new Date()
+        }, { merge: true });
+
+        setMessage('Admin-tilgang fjernet!');
+      }
+    } catch (error) {
+      console.error('Feil ved fjerning av admin:', error);
+      setMessage('Feil ved fjerning av admin: ' + error.message);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="admin-page">
+        <div className="admin-content">
+          <h2>Laster...</h2>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
     return (
       <div className="admin-page">
         <div className="admin-content">
           <h2>Ikke tilgang</h2>
           <p>Du må være logget inn for å se denne siden.</p>
+          <Auth user={user} setUser={setUser} />
           <button onClick={() => navigate('/')} className="back-btn">
             Tilbake til forsiden
           </button>
@@ -166,9 +273,12 @@ const AdminPage = () => {
     <div className="admin-page">
       <header className="admin-header">
         <h1>Administrasjonspanel</h1>
-        <button onClick={() => navigate('/')} className="back-btn">
-          Tilbake til forsiden
-        </button>
+        <div className="header-actions">
+          <Auth user={user} setUser={setUser} />
+          <button onClick={() => navigate('/')} className="back-btn">
+            Tilbake til forsiden
+          </button>
+        </div>
       </header>
 
       <div className="admin-content">
@@ -228,17 +338,37 @@ const AdminPage = () => {
                 </div>
                 {selectedDepartment === dept.id && (
                   <div className="user-access-panel">
-                    <h4>Gi tilgang til brukere:</h4>
+                    <h4>Administrer brukertilgang:</h4>
                     <div className="users-list">
                       {users.map(user => (
                         <div key={user.id} className="user-item">
                           <span>{user.email}</span>
-                          <button 
-                            onClick={() => handleAddUserToDepartment(user.id, dept.id)}
-                            className="add-user-btn"
-                          >
-                            Legg til
-                          </button>
+                          <div className="role-buttons">
+                            <button
+                              onClick={() => handleAddUserToDepartment(user.id, dept.id)}
+                              className="add-user-btn"
+                            >
+                              Gi tilgang
+                            </button>
+                            <button
+                              onClick={() => handleRemoveUserFromDepartment(user.id, dept.id)}
+                              className="remove-user-btn"
+                            >
+                              Fjern tilgang
+                            </button>
+                            <button
+                              onClick={() => handleMakeUserDepartmentAdmin(user.id, dept.id)}
+                              className="make-admin-btn"
+                            >
+                              Gjør til admin
+                            </button>
+                            <button
+                              onClick={() => handleRemoveDepartmentAdmin(user.id, dept.id)}
+                              className="remove-admin-btn"
+                            >
+                              Fjern admin
+                            </button>
+                          </div>
                         </div>
                       ))}
                     </div>
