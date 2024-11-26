@@ -22,6 +22,7 @@ const AdminPage = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [departments, setDepartments] = useState([]);
   const [users, setUsers] = useState([]);
+  const [userPermissions, setUserPermissions] = useState({});
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -73,6 +74,19 @@ const AdminPage = () => {
     }
   };
 
+  const fetchUserPermissions = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'departmentRoles'));
+      const permissions = {};
+      querySnapshot.docs.forEach(doc => {
+        permissions[doc.id] = doc.data();
+      });
+      setUserPermissions(permissions);
+    } catch (error) {
+      console.error('Feil ved henting av tilganger:', error);
+    }
+  };
+
   const fetchUsers = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, 'users'));
@@ -81,10 +95,18 @@ const AdminPage = () => {
         ...doc.data()
       }));
       setUsers(usersList);
+      await fetchUserPermissions();
     } catch (error) {
       console.error('Feil ved henting av brukere:', error);
       setMessage('Feil ved henting av brukere: ' + error.message);
     }
+  };
+
+  const getUserPermissions = (userId, departmentId) => {
+    const userPerms = userPermissions[userId] || {};
+    const isAdmin = (userPerms.adminOf || []).includes(departmentId);
+    const isMember = (userPerms.memberOf || []).includes(departmentId);
+    return { isAdmin, isMember };
   };
 
   const handleCreateDepartment = async (e) => {
@@ -146,6 +168,7 @@ const AdminPage = () => {
       
       setMessage('Bruker lagt til i avdeling!');
       await fetchDepartments();
+      await fetchUserPermissions();
     } catch (error) {
       console.error('Feil ved tillegging av bruker:', error);
       setMessage('Feil ved tillegging av bruker: ' + error.message);
@@ -175,6 +198,7 @@ const AdminPage = () => {
 
         setMessage('Brukertilgang fjernet!');
         await fetchDepartments();
+        await fetchUserPermissions();
       }
     } catch (error) {
       console.error('Feil ved fjerning av brukertilgang:', error);
@@ -202,6 +226,7 @@ const AdminPage = () => {
       }, { merge: true });
       
       setMessage('Bruker gjort til avdelingsadmin!');
+      await fetchUserPermissions();
     } catch (error) {
       console.error('Feil ved setting av admin:', error);
       setMessage('Feil ved setting av admin: ' + error.message);
@@ -223,6 +248,7 @@ const AdminPage = () => {
         }, { merge: true });
 
         setMessage('Admin-tilgang fjernet!');
+        await fetchUserPermissions();
       }
     } catch (error) {
       console.error('Feil ved fjerning av admin:', error);
@@ -340,37 +366,56 @@ const AdminPage = () => {
                   <div className="user-access-panel">
                     <h4>Administrer brukertilgang:</h4>
                     <div className="users-list">
-                      {users.map(user => (
-                        <div key={user.id} className="user-item">
-                          <span>{user.email}</span>
-                          <div className="role-buttons">
-                            <button
-                              onClick={() => handleAddUserToDepartment(user.id, dept.id)}
-                              className="add-user-btn"
-                            >
-                              Gi tilgang
-                            </button>
-                            <button
-                              onClick={() => handleRemoveUserFromDepartment(user.id, dept.id)}
-                              className="remove-user-btn"
-                            >
-                              Fjern tilgang
-                            </button>
-                            <button
-                              onClick={() => handleMakeUserDepartmentAdmin(user.id, dept.id)}
-                              className="make-admin-btn"
-                            >
-                              Gjør til admin
-                            </button>
-                            <button
-                              onClick={() => handleRemoveDepartmentAdmin(user.id, dept.id)}
-                              className="remove-admin-btn"
-                            >
-                              Fjern admin
-                            </button>
+                      {users.map(user => {
+                        const permissions = getUserPermissions(user.id, dept.id);
+                        return (
+                          <div key={user.id} className="user-item">
+                            <div className="user-info-with-permissions">
+                              <span className="user-email">{user.email}</span>
+                              <div className="permission-badges">
+                                {permissions.isAdmin && (
+                                  <span className="badge admin">Admin</span>
+                                )}
+                                {permissions.isMember && (
+                                  <span className="badge member">Medlem</span>
+                                )}
+                              </div>
+                            </div>
+                            <div className="role-buttons">
+                              {!permissions.isMember ? (
+                                <button
+                                  onClick={() => handleAddUserToDepartment(user.id, dept.id)}
+                                  className="add-user-btn"
+                                >
+                                  Gi tilgang
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => handleRemoveUserFromDepartment(user.id, dept.id)}
+                                  className="remove-user-btn"
+                                >
+                                  Fjern tilgang
+                                </button>
+                              )}
+                              {!permissions.isAdmin ? (
+                                <button
+                                  onClick={() => handleMakeUserDepartmentAdmin(user.id, dept.id)}
+                                  className="make-admin-btn"
+                                >
+                                  Gjør til admin
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => handleRemoveDepartmentAdmin(user.id, dept.id)}
+                                  className="remove-admin-btn"
+                                >
+                                  Fjern admin
+                                </button>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 )}
